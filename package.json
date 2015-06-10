@@ -1,0 +1,39 @@
+{
+  "name": "social-auth",
+  "version": "1.0.0",
+  "description": "Module to validate access_token, get access_token from refresh_token, store them in db etc",
+  "main": "index.js",
+  "scripts": {
+    "test": "node test/all.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/debianmaster/social-auth.git"
+  },
+  "keywords": [
+    "social",
+    "login",
+    "google",
+    "login",
+    "facebook",
+    "login",
+    "access",
+    "token",
+    "refresh",
+    "token"
+  ],
+  "author": "Chakradhar RAo Jonagam https://github.com/debianmaster",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/debianmaster/social-auth/issues"
+  },
+  "homepage": "https://github.com/debianmaster/social-auth",
+  "dependencies": {
+    "async": "^1.2.1",
+    "request": "^2.57.0",
+    "test": "^0.6.0"
+  },
+  "devDependencies": {
+    "test": ">=0.0.5"
+  }
+}
