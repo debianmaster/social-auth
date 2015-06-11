@@ -9,7 +9,11 @@ socialGoogle.prototype.getRefreshTokenFromCode = function (code,cb) {
     cf["grant_type"]="authorization_code";
     cf["code"]=code;
     request.post(this.baseURL, {form:cf},function(err,httpResponse,body){
-       cb(err,body);
+        if(err) cb(err);
+        var tokens=JSON.parse(body);
+        if(tokens['error']!=undefined)
+            cb(tokens);
+        else cb(null,tokens);
     });
 };
 socialGoogle.prototype.getAccessTokenFromRefreshToken = function (refresh_token,cb) {
@@ -42,11 +46,12 @@ var socialDb=function(mongoURL,collectioname){
 }
 
 socialDb.prototype.getRefreshTokenFromAccessToken = function(access_token,query,cb){
+    query[access_token]=access_token;
     this.db[this.userCollection].findOne(query,function(err,data){
        if(data==null)
-        cb({msg:'Not Found'},{});
+            cb({msg:'Not Found'},{});
        else
-        cb(err,{refresh_token:data['refresh_token']});
+           cb(err,data['refresh_token']);
     });
 }
 socialDb.prototype.storeAccessToken = function(access_token,query,cb){
