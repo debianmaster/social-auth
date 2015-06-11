@@ -1,4 +1,5 @@
 var request = require('request');
+var mongojs = require("mongojs");
 var socialGoogle = function (client_id,client_secret,redirect_uri) {
     this.config={client_id : client_id,client_secret : client_secret,redirect_uri : redirect_uri};
     this.baseURL="https://www.googleapis.com/oauth2/v3/token";
@@ -34,4 +35,41 @@ socialGoogle.prototype.isValidToken = function (access_token,cb) {
         }
     });
 };
+
+var socialDb=function(mongoURL,collectioname){
+    this.db = mongojs(mongoURL,[collectioname]);
+    this.userCollection = collectioname;
+}
+
+socialDb.prototype.getRefreshTokenFromAccessToken = function(access_token,query,cb){
+    this.db[this.userCollection].findOne(query,function(err,data){
+       if(data==null)
+        cb({msg:'Not Found'},{});
+       else
+        cb(err,{refresh_token:data['refresh_token']});
+    });
+}
+socialDb.prototype.storeAccessToken = function(access_token,query,cb){
+    this.db[this.userCollection].findAndModify({
+        query: query,
+        update: { $set: { access_token: access_token } }
+    }, function(err, data, lastErrorObject) {
+        if(data==null)
+            cb({msg:'Not Found'},{});
+        else
+            cb(err,{msg:'OK'});
+    });
+}
+socialDb.prototype.storeTokens = function(tokens,query,cb){
+    this.db[this.userCollection].findAndModify({
+        query: query,
+        update: { $set: tokens }
+    }, function(err, data, lastErrorObject) {
+        if(data==null)
+            cb({msg:'Not Found'},{});
+        else
+            cb(err,{msg:'OK'});
+    });
+}
 module.exports.google = socialGoogle;
+module.exports.socialDb = socialDb;

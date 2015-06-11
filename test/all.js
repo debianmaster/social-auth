@@ -1,4 +1,4 @@
-var Social = require('../index.js');
+var Social = require('../index.js').google;
 var social=new Social("25145FAKEclt.googleusercontent.com","dptK5wGFAKE2zS4RwU8O","http://localhost/callback");
 
 //This test module is not yet complete

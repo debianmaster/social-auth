@@ -30,6 +30,7 @@
   "homepage": "https://github.com/debianmaster/social-auth",
   "dependencies": {
     "async": "^1.2.1",
+    "mongojs": "^1.0.0",
     "request": "^2.57.0",
     "test": "^0.6.0"
   },
