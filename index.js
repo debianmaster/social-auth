@@ -44,9 +44,30 @@ var socialDb=function(mongoURL,collectioname){
     this.db = mongojs(mongoURL,[collectioname]);
     this.userCollection = collectioname;
 }
-
+socialGoogle.prototype.getUserDetails = function (user_id,access_token,cb) {
+  request.get(this.plusURL+"/"+user_id+"?access_token="+access_token,function(err,httpResponse,body){
+        if(err){
+           cb(err);
+        }
+        else{
+            var result= JSON.parse(body);
+            if(result['error_description']!=undefined)
+                cb(result);
+            else
+                cb(null,result);
+        }
+  });
+};
+socialGoogle.prototype.getUserMinInfo = function (details) {
+  return {
+     firstname: details.givenName,
+     lastname: details.familyName,
+     email:details.email,
+     gender: details.gender
+  }
+};
 socialDb.prototype.getRefreshTokenFromAccessToken = function(access_token,query,cb){
-    query[access_token]=access_token;
+    query['access_token']=access_token;
     this.db[this.userCollection].findOne(query,function(err,data){
        if(data==null)
             cb({msg:'Not Found'},{});
